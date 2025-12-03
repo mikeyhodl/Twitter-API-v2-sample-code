@@ -1,12 +1,5 @@
-/**
- * Create Post - X API v2
- * 
- * Endpoint: POST https://api.x.com/2/posts
- * Docs: https://developer.x.com/en/docs/twitter-api/tweets/manage-tweets/api-reference/post-tweets
- * 
- * Authentication: OAuth 2.0 (User Context)
- * Required env vars: CLIENT_ID, CLIENT_SECRET
- */
+// Get User objects by username, using user authentication
+// https://developer.twitter.com/en/docs/twitter-api/users/lookup/quick-start
 
 const { 
   Client, 
@@ -20,14 +13,17 @@ const readline = require('readline').createInterface({
   output: process.stdout
 });
 
+// The code below sets the client ID and client secret from your environment variables
+// To set environment variables on macOS or Linux, run the export commands below from the terminal:
+// export CLIENT_ID='YOUR-CLIENT-ID'
+// export CLIENT_SECRET='YOUR-CLIENT-SECRET'
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 
-// The text content of the post. You can also add parameters for polls,
-// quote posts, reply settings, and more.
-const data = {
-  text: "Hello world!"
-};
+// These are the parameters for the API request
+// specify usernames to fetch, and any additional fields that are required
+// by default, only the User ID, name and username are returned
+const usernames = ['XDevelopers', 'X']; // Edit usernames to look up
 
 async function input(prompt) {
   return new Promise((resolve) => {
@@ -60,7 +56,7 @@ const getQueryStringParams = (query) => {
       clientId: clientId,
       clientSecret: clientSecret,
       redirectUri: 'https://example.com',
-      scope: ['tweet.read', 'users.read', 'tweet.write', 'offline.access']
+      scope: ['tweet.read', 'users.read', 'offline.access']
     };
 
     const oauth2 = new OAuth2(oauth2Config);
@@ -95,8 +91,15 @@ const getQueryStringParams = (query) => {
     });
 
     // Make the request using SDK
-    const response = await client.posts.create(data);
-    console.dir(response, { depth: null });
+    const response = await client.users.getByUsernames(usernames, {
+      userFields: ['created_at', 'description'],
+      expansions: ['pinned_tweet_id']
+    });
+    
+    console.dir(response, {
+      depth: null
+    });
+
   } catch (e) {
     console.log(e);
     process.exit(-1);

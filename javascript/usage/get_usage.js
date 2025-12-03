@@ -1,5 +1,5 @@
-// Lookup Spaces by ID
-// https://developer.twitter.com/en/docs/twitter-api/spaces/lookup
+// Get Posts Usage
+// https://developer.twitter.com/en/docs/twitter-api/usage/tweets
 
 const { Client } = require('@xdevplatform/xdk');
 
@@ -9,16 +9,10 @@ const { Client } = require('@xdevplatform/xdk');
 const token = process.env.BEARER_TOKEN;
 const client = new Client({ bearerToken: token });
 
-const query = 'NBA';
-
 (async () => {
     try {
-        // Edit query parameters below and specify a search query
-        // optional params: host_ids,conversation_controls,created_at,creator_id,id,invited_user_ids,is_ticketed,lang,media_key,participants,scheduled_start,speaker_ids,started_at,state,title,updated_at
-        const response = await client.spaces.search(query, {
-            spaceFields: ['title', 'created_at'],
-            expansions: ['creator_id']
-        });
+        // Make request
+        const response = await client.usage.get();
         
         console.dir(response, {
             depth: null
@@ -30,3 +24,4 @@ const query = 'NBA';
     }
     process.exit();
 })();
+

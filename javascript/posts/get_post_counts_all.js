@@ -1,5 +1,5 @@
-// Lookup Spaces by ID
-// https://developer.twitter.com/en/docs/twitter-api/spaces/lookup
+// Search for public posts across the whole Twitter archive
+// https://developer.twitter.com/en/docs/twitter-api/tweets/search/quick-start/full-archive-search
 
 const { Client } = require('@xdevplatform/xdk');
 
@@ -9,15 +9,13 @@ const { Client } = require('@xdevplatform/xdk');
 const token = process.env.BEARER_TOKEN;
 const client = new Client({ bearerToken: token });
 
-const query = 'NBA';
-
 (async () => {
     try {
         // Edit query parameters below and specify a search query
-        // optional params: host_ids,conversation_controls,created_at,creator_id,id,invited_user_ids,is_ticketed,lang,media_key,participants,scheduled_start,speaker_ids,started_at,state,title,updated_at
-        const response = await client.spaces.search(query, {
-            spaceFields: ['title', 'created_at'],
-            expansions: ['creator_id']
+        // optional params: start_time,end_time,since_id,until_id,next_token,granularity
+        const response = await client.posts.getCountsAll('from:xdevelopers', {
+            granularity: 'day',
+            startTime: '2021-01-01T00:00:00Z'
         });
         
         console.dir(response, {

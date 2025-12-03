@@ -1,34 +1,26 @@
-/**
- * Recent Search - X API v2
- * 
- * Endpoint: GET https://api.x.com/2/posts/search/recent
- * Docs: https://developer.x.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-recent
- * 
- * Authentication: Bearer Token (App-only)
- * Required env vars: BEARER_TOKEN
- * 
- * Note: Returns posts from the last 7 days.
- * This example demonstrates automatic pagination using PostPaginator
- * to fetch all pages of results.
- */
+// Search for public posts across the whole Twitter archive
+// https://developer.twitter.com/en/docs/twitter-api/tweets/search/quick-start/full-archive-search
 
 const { Client, PostPaginator } = require('@xdevplatform/xdk');
 
+// The code below sets the bearer token from your environment variables
+// To set environment variables on macOS or Linux, run the export command below from the terminal:
+// export BEARER_TOKEN='YOUR-TOKEN'
 const bearerToken = process.env.BEARER_TOKEN;
 const client = new Client({ bearerToken: bearerToken });
 
-const query = 'from:x -is:retweet';
+const query = 'from:xdevelopers';
 
-const searchRecent = async () => {
-    console.log("Searching recent posts...");
+const searchAll = async () => {
+    console.log("Searching full archive...");
     
     // Use paginator for automatic pagination
     const searchResults = new PostPaginator(
         async (token) => {
-            const res = await client.posts.searchRecent(query, {
+            const res = await client.posts.searchAll(query, {
                 maxResults: 100,
                 nextToken: token,
-                tweetFields: ['author_id', 'created_at']
+                tweetFields: ['author_id']
             });
             return {
                 data: res.data ?? [],
@@ -52,7 +44,7 @@ const searchRecent = async () => {
     console.log(`Got ${searchResults.posts.length} posts for query: ${query}`);
 }
 
-searchRecent().catch(err => {
+searchAll().catch(err => {
     console.error('Error:', err);
     process.exit(-1);
 });

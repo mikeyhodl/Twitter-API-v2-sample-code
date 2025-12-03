@@ -1,13 +1,4 @@
-/**
- * Create Post - X API v2
- * 
- * Endpoint: POST https://api.x.com/2/posts
- * Docs: https://developer.x.com/en/docs/twitter-api/tweets/manage-tweets/api-reference/post-tweets
- * 
- * Authentication: OAuth 2.0 (User Context)
- * Required env vars: CLIENT_ID, CLIENT_SECRET
- */
-
+// Unmute a user, using user authentication
 const { 
   Client, 
   OAuth2,
@@ -20,14 +11,20 @@ const readline = require('readline').createInterface({
   output: process.stdout
 });
 
+// The code below sets the client ID and client secret from your environment variables
+// To set environment variables on macOS or Linux, run the export commands below from the terminal:
+// export CLIENT_ID='YOUR-CLIENT-ID'
+// export CLIENT_SECRET='YOUR-CLIENT-SECRET'
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 
-// The text content of the post. You can also add parameters for polls,
-// quote posts, reply settings, and more.
-const data = {
-  text: "Hello world!"
-};
+// Be sure to replace your-user-id with your own user ID or one of an authenticated user
+// You can find a user ID by using the user lookup endpoint
+const sourceUserId = "your-user-id";
+
+// Be sure to add replace the id-to-unmute with the user id of the you wish to unmute.
+// You can find a user ID by using the user lookup endpoint
+const targetUserId = "id-to-unmute";
 
 async function input(prompt) {
   return new Promise((resolve) => {
@@ -60,7 +57,7 @@ const getQueryStringParams = (query) => {
       clientId: clientId,
       clientSecret: clientSecret,
       redirectUri: 'https://example.com',
-      scope: ['tweet.read', 'users.read', 'tweet.write', 'offline.access']
+      scope: ['tweet.read', 'users.read', 'tweet.write', 'offline.access', 'mute.write']
     };
 
     const oauth2 = new OAuth2(oauth2Config);
@@ -95,8 +92,10 @@ const getQueryStringParams = (query) => {
     });
 
     // Make the request using SDK
-    const response = await client.posts.create(data);
-    console.dir(response, { depth: null });
+    const response = await client.users.unmuteUser(sourceUserId, targetUserId);
+    console.dir(response, {
+      depth: null
+    });
   } catch (e) {
     console.log(e);
     process.exit(-1);
