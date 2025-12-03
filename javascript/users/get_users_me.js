@@ -1,13 +1,3 @@
-/**
- * Create Post - X API v2
- * 
- * Endpoint: POST https://api.x.com/2/posts
- * Docs: https://developer.x.com/en/docs/twitter-api/tweets/manage-tweets/api-reference/post-tweets
- * 
- * Authentication: OAuth 2.0 (User Context)
- * Required env vars: CLIENT_ID, CLIENT_SECRET
- */
-
 const { 
   Client, 
   OAuth2,
@@ -20,14 +10,12 @@ const readline = require('readline').createInterface({
   output: process.stdout
 });
 
+// The code below sets the client ID and client secret from your environment variables
+// To set environment variables on macOS or Linux, run the export commands below from the terminal:
+// export CLIENT_ID='YOUR-CLIENT-ID'
+// export CLIENT_SECRET='YOUR-CLIENT-SECRET'
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
-
-// The text content of the post. You can also add parameters for polls,
-// quote posts, reply settings, and more.
-const data = {
-  text: "Hello world!"
-};
 
 async function input(prompt) {
   return new Promise((resolve) => {
@@ -60,7 +48,7 @@ const getQueryStringParams = (query) => {
       clientId: clientId,
       clientSecret: clientSecret,
       redirectUri: 'https://example.com',
-      scope: ['tweet.read', 'users.read', 'tweet.write', 'offline.access']
+      scope: ['tweet.read', 'users.read', 'offline.access']
     };
 
     const oauth2 = new OAuth2(oauth2Config);
@@ -94,9 +82,16 @@ const getQueryStringParams = (query) => {
       accessToken: tokens.access_token
     });
 
-    // Make the request using SDK
-    const response = await client.posts.create(data);
-    console.dir(response, { depth: null });
+    // Make the request using SDK - get authenticated user
+    const response = await client.users.getMe({
+      userFields: ['created_at', 'description'],
+      expansions: ['pinned_tweet_id']
+    });
+    
+    console.dir(response, {
+      depth: null
+    });
+
   } catch (e) {
     console.log(e);
     process.exit(-1);
