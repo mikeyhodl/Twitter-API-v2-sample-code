@@ -24,8 +24,19 @@ Sign up at the [X Developer Portal](https://developer.x.com/en/portal/dashboard)
 
 ### 2. Set Environment Variables
 
+**For read-only operations (search, lookup):**
 ```bash
 export BEARER_TOKEN='your_bearer_token'
+```
+
+**For user actions (post, like, repost, bookmark, etc.):**
+```bash
+export CLIENT_ID='your_client_id'
+export CLIENT_SECRET='your_client_secret'
+```
+
+**For OAuth 1.0a (legacy endpoints):**
+```bash
 export CONSUMER_KEY='your_consumer_key'
 export CONSUMER_SECRET='your_consumer_secret'
 ```
@@ -72,8 +83,8 @@ java -cp ".:lib/*" RecentSearchDemo
 | Type | Use Case | Env Vars |
 |------|----------|----------|
 | Bearer Token | Read-only (search, lookup) | `BEARER_TOKEN` |
-| OAuth 1.0a | User actions (post, like) | `CONSUMER_KEY`, `CONSUMER_SECRET` |
-| OAuth 2.0 PKCE | Bookmarks, newer endpoints | OAuth flow |
+| OAuth 2.0 PKCE | User actions (post, like, repost, bookmark, mute, etc.) | `CLIENT_ID`, `CLIENT_SECRET` |
+| OAuth 1.0a | Legacy endpoints (if applicable) | `CONSUMER_KEY`, `CONSUMER_SECRET` |
 
 ## 🤖 For LLMs
 

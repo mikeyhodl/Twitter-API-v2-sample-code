@@ -28,16 +28,24 @@ The `Gemfile` includes:
 
 ### 3. Set environment variables
 
-For **Bearer Token** authentication (app-only):
+**For read-only operations (search, lookup):**
 ```bash
 export BEARER_TOKEN='your_bearer_token'
 ```
 
-For **OAuth 1.0a** authentication (user context):
+**For user actions (post, like, repost, bookmark, etc.):**
+```bash
+export CLIENT_ID='your_client_id'
+export CLIENT_SECRET='your_client_secret'
+```
+
+**For OAuth 1.0a (legacy endpoints):**
 ```bash
 export CONSUMER_KEY='your_consumer_key'
 export CONSUMER_SECRET='your_consumer_secret'
 ```
+
+**Note:** Most user action examples require OAuth 2.0 authentication with `CLIENT_ID` and `CLIENT_SECRET`. Read-only examples (search, lookup) only require `BEARER_TOKEN`.
 
 ## Examples by Category
 
